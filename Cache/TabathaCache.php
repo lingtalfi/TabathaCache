@@ -94,6 +94,13 @@ class TabathaCache implements TabathaCacheInterface
         }
     }
 
+
+    public function cleanAll()
+    {
+        FileSystemTool::remove($this->dir);
+    }
+
+
     //--------------------------------------------
     //
     //--------------------------------------------

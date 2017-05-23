@@ -118,4 +118,11 @@ interface TabathaCacheInterface
      * @return void
      */
     public function clean($deleteIds);
+
+    /**
+     * Cleans all caches.
+     *
+     * @return void
+     */
+    public function cleanAll();
 }
