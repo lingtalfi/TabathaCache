@@ -104,9 +104,12 @@ interface TabathaCacheInterface
      * @param $cacheId , string, the cache identifier.
      * @param callable $generateCallback , creates the result: is called only if the cache doesn't exist
      * @param $deleteIds : string|array
+     * @param $forceGenerate : bool=false, allows you to temporary force the
+     *                          generateCallback (i.e. not using the cached version)
+     *
      * @return mixed, the result of the generateCallback (or its cached equivalent if exist)
      */
-    public function get($cacheId, callable $generateCallback, $deleteIds);
+    public function get($cacheId, callable $generateCallback, $deleteIds, $forceGenerate=false);
 
     /**
      * Deletes the caches "listening" to the given deleteId(s).

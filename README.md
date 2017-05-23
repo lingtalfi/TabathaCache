@@ -198,6 +198,10 @@ is equivalent to:
 History Log
 ------------------    
     
+- 1.2.0 -- 2017-05-23
+
+    - add TabathaCacheInterface.get $forceGenerate option
+    
 - 1.1.0 -- 2017-05-23
 
     - add debug hooks

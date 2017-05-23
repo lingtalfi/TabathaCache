@@ -45,13 +45,13 @@ class TabathaCache implements TabathaCacheInterface
     }
 
 
-    public function get($cacheId, callable $generateCallback, $deleteIds)
+    public function get($cacheId, callable $generateCallback, $deleteIds, $forceGenerate = false)
     {
         if (!is_array($deleteIds)) {
             $deleteIds = [$deleteIds];
         }
         $path = $this->dir . "/" . $cacheId . ".txt";
-        if (file_exists($path)) {
+        if (false === $forceGenerate && file_exists($path)) {
             $this->onCacheHit($cacheId, $deleteIds);
             $c = file_get_contents($path);
             return unserialize($c);
