@@ -133,6 +133,68 @@ A::cache()->clean("ek_currency.create"); // this will remove the myCacheId entry
 
 
 
+
+Cache strategies
+===================
+
+If you want to, you can refer to the following cache naming conventions in your projects.
+
+Those conventions define how **delete identifiers** should be named.
+
+
+
+Tabatha Db
+--------------
+This strategy is used when the cache is created by retrieving info from a database.
+
+When this is the case, we can always identify from which table(s) the cache took its information from.
+
+Those tables are the base name for the delete identifiers.
+
+Imagine your application has a table named "category".
+
+Now for a given table (like category for instance), we can execute different types of actions:
+
+- create
+- read
+- update
+- delete
+
+The read action probably won't trigger a cache reset, but the other types potentially will.
+
+So, the tabatha db convention is like this:
+
+- deleteId: (<db> <.>)? <table> <.> <actionType>
+
+
+You would use the db prefix if your application use multiple databases,
+otherwise you can start directly with the table name.
+
+The action type is one of: create, update, delete.
+
+Remember that you can use the wild cards, so that:
+
+- category.*
+
+is equivalent to:
+
+- category.create
+- category.update
+- category.delete
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 History Log
 ------------------    
     
