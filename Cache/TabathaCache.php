@@ -52,11 +52,11 @@ class TabathaCache implements TabathaCacheInterface
         }
         $path = $this->dir . "/" . $cacheId . ".txt";
         if (file_exists($path)) {
-//            a("from cache");
+            $this->onCacheHit($cacheId, $deleteIds);
             $c = file_get_contents($path);
             return unserialize($c);
         } else {
-//            a("new content");
+            $this->onCacheCreate($cacheId, $deleteIds);
             $c = call_user_func($generateCallback);
             FileSystemTool::mkfile($path, serialize($c));
 
@@ -97,6 +97,19 @@ class TabathaCache implements TabathaCacheInterface
     //--------------------------------------------
     //
     //--------------------------------------------
+    protected function onCacheCreate($cacheId, array $deleteIds) // override me
+    {
+
+    }
+
+    protected function onCacheHit($cacheId, array $deleteIds) // override me
+    {
+
+    }
+
+    //--------------------------------------------
+    //
+    //--------------------------------------------
     private function setListeners(array $deleteIds, $cacheId)
     {
         $dir = $this->dir . "/" . $this->_privateDir;
@@ -109,6 +122,7 @@ class TabathaCache implements TabathaCacheInterface
                 $listeners = unserialize(file_get_contents($f));
             }
             $listeners[] = $cacheId;
+//            $listeners = array_unique($listeners);
             $c = serialize($listeners);
             FileSystemTool::mkfile($f, $c);
         }

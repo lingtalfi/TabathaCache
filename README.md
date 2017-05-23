@@ -198,6 +198,10 @@ is equivalent to:
 History Log
 ------------------    
     
+- 1.1.0 -- 2017-05-23
+
+    - add debug hooks
+    
 - 1.0.0 -- 2017-05-22
 
     - initial commit
