@@ -87,6 +87,9 @@ class TabathaCache implements TabathaCacheInterface
         }
         $dir = $this->dir . "/" . $this->_privateDir;
         $entries = [];
+
+
+        // add wildcards entries
         foreach ($deleteIds as $deleteId) {
             $p = explode('.', $deleteId);
             while (null !== array_pop($p)) {
@@ -99,6 +102,9 @@ class TabathaCache implements TabathaCacheInterface
                 }
             }
         }
+
+
+        $entries = array_merge($deleteIds, $entries);
         foreach ($entries as $entry) {
             $f = $dir . "/" . $entry;
             $f .= '.txt';
