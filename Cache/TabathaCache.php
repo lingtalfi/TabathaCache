@@ -22,6 +22,7 @@ class TabathaCache implements TabathaCacheInterface
     private $dir;
     private $_wildcard;
     private $_privateDir;
+    private $defaultForceGenerate;
 
 
     public function __construct()
@@ -31,6 +32,7 @@ class TabathaCache implements TabathaCacheInterface
         // shouldn't touch the one below
         $this->_wildcard = '__wildcard__';
         $this->_privateDir = '_private_xxx_';
+        $this->defaultForceGenerate = false;
     }
 
     public static function create()
@@ -44,9 +46,19 @@ class TabathaCache implements TabathaCacheInterface
         return $this;
     }
 
-
-    public function get($cacheId, callable $generateCallback, $deleteIds, $forceGenerate = false)
+    public function setDefaultForceGenerate($defaultForceGenerate)
     {
+        $this->defaultForceGenerate = $defaultForceGenerate;
+        return $this;
+    }
+
+
+    public function get($cacheId, callable $generateCallback, $deleteIds, $forceGenerate = null)
+    {
+        if (null === $forceGenerate) {
+            $forceGenerate = $this->defaultForceGenerate;
+        }
+
         if (!is_array($deleteIds)) {
             $deleteIds = [$deleteIds];
         }
