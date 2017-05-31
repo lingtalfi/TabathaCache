@@ -73,6 +73,13 @@ namespace TabathaCache\Cache;
  * However, the wildcard must be the last char.
  *
  *
+ * Note: for a db system, tabatha can help you implementing a cache system that operates at the entry/row level.
+ * Just add the primary keys, in your delete id:
+ *
+ * - my_table.delete.6      # we can store a cache that would be only deleted if the record #6 is deleted from my_table for instance
+ *
+ *
+ *
  * Enjoy!
  *
  *
