@@ -53,26 +53,26 @@ class TabathaCache implements TabathaCacheInterface
     }
 
 
-    public function get($cacheId, callable $generateCallback, $deleteIds, $forceGenerate = null)
+    public function get($cacheId, callable $generateCallback, $deleteNamespaces, $forceGenerate = null)
     {
         if (null === $forceGenerate) {
             $forceGenerate = $this->defaultForceGenerate;
         }
 
-        if (!is_array($deleteIds)) {
-            $deleteIds = [$deleteIds];
+        if (!is_array($deleteNamespaces)) {
+            $deleteNamespaces = [$deleteNamespaces];
         }
         $path = $this->dir . "/" . $cacheId . ".txt";
         if (false === $forceGenerate && file_exists($path)) {
-            $this->onCacheHit($cacheId, $deleteIds);
+            $this->onCacheHit($cacheId, $deleteNamespaces);
             $c = file_get_contents($path);
             return unserialize($c);
         } else {
-            $this->onCacheCreate($cacheId, $deleteIds);
+            $this->onCacheCreate($cacheId, $deleteNamespaces);
             $c = call_user_func($generateCallback);
             FileSystemTool::mkfile($path, serialize($c));
 
-            $this->setListeners($deleteIds, $cacheId);
+            $this->setListeners($deleteNamespaces, $cacheId);
             FileSystemTool::mkfile($path, serialize($c));
 
 
@@ -91,20 +91,15 @@ class TabathaCache implements TabathaCacheInterface
 
         // add wildcards entries
         foreach ($deleteIds as $deleteId) {
+            $entries[] = $deleteId;
             $p = explode('.', $deleteId);
             while (null !== array_pop($p)) {
                 if (count($p) > 0) {
-                    $entries[] = implode('.', $p) . '.' . $this->_wildcard;
-
-                } else {
-                    $entries[] = $this->_wildcard;
-                    break;
+                    $entries[] = implode('.', $p);
                 }
             }
         }
 
-
-        $entries = array_merge($deleteIds, $entries);
         foreach ($entries as $entry) {
             $f = $dir . "/" . $entry;
             $f .= '.txt';
@@ -124,12 +119,12 @@ class TabathaCache implements TabathaCacheInterface
     //--------------------------------------------
     protected function onCacheCreate($cacheId, array $deleteIds) // override me
     {
-
+//        a("cache create: $cacheId");
     }
 
     protected function onCacheHit($cacheId, array $deleteIds) // override me
     {
-
+//        a("cache hit: $cacheId");
     }
 
     //--------------------------------------------
