@@ -30,7 +30,6 @@ class TabathaCache implements TabathaCacheInterface
         $this->dir = '/tmp/tabatha';
 
         // shouldn't touch the one below
-        $this->_wildcard = '__wildcard__';
         $this->_privateDir = '_private_xxx_';
         $this->defaultForceGenerate = false;
     }
@@ -134,7 +133,6 @@ class TabathaCache implements TabathaCacheInterface
     {
         $dir = $this->dir . "/" . $this->_privateDir;
         foreach ($deleteIds as $deleteId) {
-            $deleteId = str_replace('*', $this->_wildcard, $deleteId);
             $deleteId .= '.txt';
             $f = $dir . "/" . $deleteId;
             $listeners = [];
@@ -142,7 +140,7 @@ class TabathaCache implements TabathaCacheInterface
                 $listeners = unserialize(file_get_contents($f));
             }
             $listeners[] = $cacheId;
-//            $listeners = array_unique($listeners);
+            $listeners = array_unique($listeners);
             $c = serialize($listeners);
             FileSystemTool::mkfile($f, $c);
         }
