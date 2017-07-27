@@ -54,6 +54,7 @@ class TabathaCache implements TabathaCacheInterface
 
     public function get($cacheId, callable $generateCallback, $deleteNamespaces, $forceGenerate = null)
     {
+
         if (null === $forceGenerate) {
             $forceGenerate = $this->defaultForceGenerate;
         }
