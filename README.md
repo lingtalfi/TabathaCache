@@ -85,7 +85,7 @@ It's not too hard to add tags to a cache content though, just look at the code b
 ```php
 $myCachedContent = $cache->get( "theCacheIdentifier", function(){
      return "some very long string";
-}, \["myDeleteId"\]);
+}, ["myDeleteId"]);
 ```
 
 
@@ -97,7 +97,7 @@ Continuing the above example, let's say that now I want to delete cache entry wh
 Since I've assigned the myDeleteId tag in the very last snippet, I can just use that tag now, like this:
 
 ```php
-$cache->clean(\["myDeleteId"\]);
+$cache->clean(["myDeleteId"]);
 ```
 
 
