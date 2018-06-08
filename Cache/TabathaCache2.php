@@ -160,6 +160,7 @@ class TabathaCache2 implements TabathaCache2Interface
                         unlink($path);
                     }
                 }
+                unlink($deleteListFile); // note: we could also NOT remove it, but it feels cleaner this way
             }
         }
     }

@@ -107,10 +107,74 @@ I'm sure you get the idea.
 
 
 
+Example
+-----------
+
+
+````php
+<?php
+
+
+use Core\Services\A;
+use TabathaCache\Cache\TabathaCache2;
+
+
+// using kamille framework here (https://github.com/lingtalfi/kamille)
+require_once __DIR__ . "/../boot.php";
+require_once __DIR__ . "/../init.php";
+A::testInit();
+
+
+
+//--------------------------------------------
+// TABATHA CACHE 2 PLAYGROUND
+//--------------------------------------------
+
+
+$cache = TabathaCache2::create()
+    ->setDir("/tmp/tabatha")
+    ->addListener("cacheCreateBefore", function () {
+        a("EVENT: cacheCreateBefore");
+    })
+    ->addListener("cacheHit", function () {
+        a("EVENT: cacheHit");
+    });
+
+
+
+
+
+/**
+ * Output so far:
+ * string(24) "EVENT: cacheCreateBefore"
+ *
+ * string(18) "Hello, I'm the var"
+ *
+ * string(15) "EVENT: cacheHit"
+ *
+ * string(18) "Hello, I'm the var"
+ *
+ * string(24) "EVENT: cacheCreateBefore"
+ *
+ * string(19) "Hello, I'm the var2"
+ */
+
+// now let's try to remove the content
+$cache->clean("group1");
+
+
+
+````
+
+
 
 
 History Log
 ------------------    
+    
+- 2.1.0 -- 2018-06-08
+
+    - enhance TabathaCache2.get method, now also cleans the delete list file after a clean call.
     
 - 2.0.0 -- 2018-06-08
 
