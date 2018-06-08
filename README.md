@@ -3,8 +3,7 @@ TabathaCache
 2017-05-22
 
 
-
-A cache system based on identifier invalidation.
+A tag-based cache system for your apps.
 
 
 This is part of the [universe framework](https://github.com/karayabin/universe-snapshot).
@@ -20,170 +19,85 @@ uni import TabathaCache
 Or just download it and place it where you want otherwise.
 
 
-What it it?
-==========
 
-Tabatha cache is a sexy cache system based on identifier invalidation.
 
-Why sexy?
 
-Because you can do a cache retrieving with one statement!
+Welcome to tabatha cache 2.
+===================
+If you want to see the old tabathaCache (version 1), please browse the README.2018-06-08.md file in this repository.
 
-Often, other cache systems force you to make at least an if block (which makes things all the sudden appear
-very complex, it gets out of the way of your application logic, it parasites your code), that's not the case
-with tabatha cache: just one statement.
+But for now, let's forget everything you know about tabatha cache, and let's start a brand new tool.
 
-Enjoy!
+TabathaCache2 is a tag-based cache system for your apps.
 
+Tag based means you can attach tags to your cached entries,
+and then later you can delete those cache entries just by using the tag identifiers.
 
 
+TLDR;
+----------------
+This class uses a base dir with the following structure:
 
-A quick example
-=====================
+- $baseDir/:
+     - cached_entries/
+         - $cacheIdentifier.cache.php
+         - ...
+     - delete_ids/
+         - $deleteId.list.php
+         - ...
 
-Just to tease your appetite.
+The "cache_entries" dir contains the cached content.
+The "delete_ids" dir contains the list of cacheIdentifiers to delete if the $deleteId is given to the clean method.
 
-If you're new to tabatha cache, please go to the tutorial section below.
 
 
-```php
-//--------------------------------------------
-// ANOTHER EXAMPLE FROM THE KAMILLE FRAMEWORK
-//--------------------------------------------
-$result = A::cache()->get('myCacheId', function () {
-     // long operation
-     $result = "resultOfLongOperation";
-     return $result;
-     }, [
-         'ek_currency.create',
-         'ek_currency.delete',
-         'ek_currency.update',
- ]);
-// now $result is available no matter what
-// other dude create a record in the currency table
-A::cache()->clean("ek_currency.create"); // this will remove the myCacheId entry
 
 
 
-```
+Crash course
+--------------------
+The first method to learn is "get".
 
+The "get" method creates a cache entry if necessary (i.e. if the content
+you're asking has not been cached yet), and then returns the cached content.
 
 
+Here is how we use it:
 
-How does it work? 
-=====================================
+// assuming $cache is a well configured TabathaCache2 instance
+$myCachedContent = $cache->get( "theCacheIdentifier", function(){
+     return "some very long string";
+});
 
-There are three things to understand to use tabatha cache:
 
-- the cache identifier
-- the delete identifiers
-- the triggers
+With the code above, the first call will trigger the callback, cache it somewhere, and returns its output.
+All subsequent calls will return the cached content.
 
 
-If you execute the example below:
+That's fine, but in this example we didn't attach any tag to this cached entry, and so programmatically
+speaking we don't have a way to erase our cached content.
 
-```php
-$result = A::cache()->get('myCacheId', function () {
-    // long operation
-    $result = "resultOfLongOperation";
-    return $result;
-}, [
-    'ek_currency.create',
-    'ek_currency.delete',
-    'ek_currency.update',
-]);
-```
+It's not too hard to add tags to a cache content though, just look at the code below, which does exactly that:
 
 
-tabatha will create the following structure:
+$myCachedContent = $cache->get( "theCacheIdentifier", function(){
+     return "some very long string";
+}, \["myDeleteId"\]);
 
 
-```txt
-- $cacheDir/
------ myCacheId.txt
------ _private_xxx_/
---------- ek_currency.create.txt
---------- ek_currency.delete.txt
---------- ek_currency.update.txt
-```
+See how easy it was?
+This leads us to the second part: deleting cache content programmatically.
 
 
-The cache identifier
-------------------------
+Continuing the above example, let's say that now I want to delete cache entry which identifier is theCacheIdentifier.
+Since I've assigned the myDeleteId tag in the very last snippet, I can just use that tag now, like this:
 
-The **$cacheDir/myCacheId.txt** file contains the content (serialized) of the cache.
+$cache->clean(\["myDeleteId"\]);
 
-When you call the get method, if this file exist, Tabatha will use it, otherwise, Tabatha
-will create it.
 
-Notice that the path of that file is named after the cache identifier and the file is located
-at the root of the **$cacheDir**.
 
-
-The delete identifiers
------------------------
-
-Then, all the files in the **\_private_xxx** directory are special files named **deleting files**.
-
-What's special about them is that you can invoke them to delete one or more cache content.
-
-Basically, a **deleting file** contains a list of **cache identifiers** to delete.
-
-So, if you invoke a **deleting file**, it loops over the list it contains and remove the corresponding
-cache content files.
-
-The last thing you need to know is how to trigger a **deleting file**.
-That's what you will discover in the next section.
-
-
-The triggers
------------------
-
-The trigger is an abstract identifier (a string if you will), that you pass to the **Tabatha.clean** 
-method in order to invoke the corresponding **deleting files**.
-
-You can pass either a string or an array of string (to trigger multiple **deleting files** at once).
-
-However, there is one rule to know here
-
-- consider the **deleting file** as a chain of dot separated components (for instance mytable.method)
-- then the rule is that to trigger a **deleting file**, you can use either the **deleting file** chain, 
-        or any longer chain.
-
-
-This means that if your **deleting file** chain looks like this:
-
-- ek_currency.create
-
-you can trigger the **deleting file** by using any of the following chains:
-
-- ek_currency.create
-- ek_currency.create.a
-- ek_currency.create.doo
-- ek_currency.create.doo.poo
-- ek_currency.create.5.2.4
-
-
-
-
-Conclusion
--------------
-So now you know everything you need to know.
-With a bit of imagination, you can do pretty kool things with Tabatha cache.
-
-
- 
-
-
-
-
-
-
-
-
-
-
-
+Ok, that's it for this tutorial.
+I'm sure you get the idea.
 
 
 
@@ -191,6 +105,10 @@ With a bit of imagination, you can do pretty kool things with Tabatha cache.
 
 History Log
 ------------------    
+    
+- 2.0.0 -- 2018-06-08
+
+    - add TabathaCache2 class
     
 - 1.5.0 -- 2017-06-08
 
