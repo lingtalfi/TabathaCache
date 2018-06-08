@@ -172,6 +172,10 @@ $cache->clean("group1");
 History Log
 ------------------    
     
+- 2.3.0 -- 2018-06-08
+
+    - enhance TabathaCache2.get method, now better resist erroneous deleteIds parameter=false
+    
 - 2.2.0 -- 2018-06-08
 
     - add TabathaCache2.setIsEnabled method
