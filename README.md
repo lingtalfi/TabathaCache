@@ -64,10 +64,12 @@ you're asking has not been cached yet), and then returns the cached content.
 
 Here is how we use it:
 
+```php
 // assuming $cache is a well configured TabathaCache2 instance
 $myCachedContent = $cache->get( "theCacheIdentifier", function(){
      return "some very long string";
 });
+```
 
 
 With the code above, the first call will trigger the callback, cache it somewhere, and returns its output.
@@ -80,9 +82,11 @@ speaking we don't have a way to erase our cached content.
 It's not too hard to add tags to a cache content though, just look at the code below, which does exactly that:
 
 
+```php
 $myCachedContent = $cache->get( "theCacheIdentifier", function(){
      return "some very long string";
 }, \["myDeleteId"\]);
+```
 
 
 See how easy it was?
@@ -92,7 +96,9 @@ This leads us to the second part: deleting cache content programmatically.
 Continuing the above example, let's say that now I want to delete cache entry which identifier is theCacheIdentifier.
 Since I've assigned the myDeleteId tag in the very last snippet, I can just use that tag now, like this:
 
+```php
 $cache->clean(\["myDeleteId"\]);
+```
 
 
 
