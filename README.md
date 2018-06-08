@@ -172,6 +172,10 @@ $cache->clean("group1");
 History Log
 ------------------    
     
+- 2.2.0 -- 2018-06-08
+
+    - add TabathaCache2.setIsEnabled method
+    
 - 2.1.0 -- 2018-06-08
 
     - enhance TabathaCache2.get method, now also cleans the delete list file after a clean call.

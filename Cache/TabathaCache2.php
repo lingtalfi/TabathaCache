@@ -97,12 +97,14 @@ class TabathaCache2 implements TabathaCache2Interface
 
     private $dir;
     protected $listeners;
+    protected $isEnabled;
 
 
     public function __construct()
     {
         $this->dir = '/tmp/tabatha';
         $this->listeners = [];
+        $this->isEnabled = true;
     }
 
     public static function create()
@@ -116,11 +118,17 @@ class TabathaCache2 implements TabathaCache2Interface
         return $this;
     }
 
+    public function setIsEnabled(bool $isEnabled)
+    {
+        $this->isEnabled = $isEnabled;
+        return $this;
+    }
+
 
     public function get(string $cacheIdentifier, callable $generateCallback, $deleteIds = null)
     {
         $path = $this->dir . "/cached_entries/" . $cacheIdentifier . ".cache.php";
-        if (file_exists($path)) {
+        if (true === $this->isEnabled && file_exists($path)) {
             $this->trigger("cacheHit", $cacheIdentifier);
             $c = file_get_contents($path);
             return unserialize($c);
