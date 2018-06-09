@@ -172,6 +172,10 @@ $cache->clean("group1");
 History Log
 ------------------    
     
+- 2.3.1 -- 2018-06-09
+
+    - fix TabathaCache2.get method error with boolean deleteIds when array was expected
+
 - 2.3.0 -- 2018-06-08
 
     - enhance TabathaCache2.get method, now better resist erroneous deleteIds parameter=false

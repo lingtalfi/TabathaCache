@@ -142,7 +142,7 @@ class TabathaCache2 implements TabathaCache2Interface
                 if (is_string($deleteIds)) {
                     $deleteIds = [$deleteIds];
                 }
-                if ($deleteIds) {
+                if (is_array($deleteIds)) {
                     $this->addCacheIdentifierToDeleteLists($cacheIdentifier, $deleteIds);
                 }
             }
