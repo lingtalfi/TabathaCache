@@ -181,9 +181,22 @@ class TabathaCache2 implements TabathaCache2Interface
         FileSystemTool::remove($this->dir);
     }
 
+
     public function cleanByCacheIdentifierPrefix($cacheIdentifierPrefix)
     {
-
+        $dir = dirname($this->dir . "/cached_entries/$cacheIdentifierPrefix");
+        $prefix = basename($cacheIdentifierPrefix);
+        $files = scandir($dir);
+        foreach ($files as $file) {
+            if (
+                "." !== $file &&
+                ".." !== $file
+            ) {
+                if (0 === strpos($file, $prefix)) {
+                    unlink($dir . "/" . $file);
+                }
+            }
+        }
     }
 
 

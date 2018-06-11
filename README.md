@@ -129,65 +129,6 @@ but I'll cover this topic in the next section (2 cache strategies).
 
 
 
-Example
------------
-
-
-````php
-<?php
-
-
-use Core\Services\A;
-use TabathaCache\Cache\TabathaCache2;
-
-
-// using kamille framework here (https://github.com/lingtalfi/kamille)
-require_once __DIR__ . "/../boot.php";
-require_once __DIR__ . "/../init.php";
-A::testInit();
-
-
-
-//--------------------------------------------
-// TABATHA CACHE 2 PLAYGROUND
-//--------------------------------------------
-
-
-$cache = TabathaCache2::create()
-    ->setDir("/tmp/tabatha")
-    ->addListener("cacheCreateBefore", function () {
-        a("EVENT: cacheCreateBefore");
-    })
-    ->addListener("cacheHit", function () {
-        a("EVENT: cacheHit");
-    });
-
-
-
-
-
-/**
- * Output so far:
- * string(24) "EVENT: cacheCreateBefore"
- *
- * string(18) "Hello, I'm the var"
- *
- * string(15) "EVENT: cacheHit"
- *
- * string(18) "Hello, I'm the var"
- *
- * string(24) "EVENT: cacheCreateBefore"
- *
- * string(19) "Hello, I'm the var2"
- */
-
-// now let's try to remove the content
-$cache->clean("group1");
-
-
-
-````
-
 
 2 cache strategies
 =====================
@@ -309,12 +250,123 @@ complementary cache strategies that can work in parallel.
 
 
 
+Example
+-----------
+
+
+````php
+<?php
+
+
+use Core\Services\A;
+use TabathaCache\Cache\TabathaCache2;
+
+
+// using kamille framework here (https://github.com/lingtalfi/kamille)
+require_once __DIR__ . "/../boot.php";
+require_once __DIR__ . "/../init.php";
+
+
+A::testInit();
+//ApplicationParameters::set("theme", "nullosAdmin");
+
+
+//--------------------------------------------
+// TABATHA CACHE 2 PLAYGROUND
+//--------------------------------------------
+// ORGANIC STRATEGY
+//--------------------------------------------
+$cache = TabathaCache2::create()
+    ->setDir("/tmp/tabatha")
+    ->addListener("cacheCreateBefore", function ($cacheIdentifier) {
+        a("EVENT: cacheCreateBefore with cacheIdentifier $cacheIdentifier");
+    })
+    ->addListener("cacheHit", function ($cacheIdentifier) {
+        a("EVENT: cacheHit with cacheIdentifier $cacheIdentifier");
+    });
+
+
+$var = $cache->get("var1", function () {
+    return "Hello, I'm the var";
+}, "group1");
+
+a($var);
+
+$var2 = $cache->get("var2", function () {
+    return "Hello, I'm the var2";
+}, "group1");
+
+a($var2);
+
+
+/**
+ * Output so far:
+ * string(50) "EVENT: cacheCreateBefore with cacheIdentifier var1"
+ * string(18) "Hello, I'm the var"
+ * string(50) "EVENT: cacheCreateBefore with cacheIdentifier var2"
+ * string(19) "Hello, I'm the var2"
+ *
+ */
+
+// now let's remove cache which has the delete identifier "group1" assigned to them
+$cache->clean("group1");
+
+
+// DAILY STRATEGY
+//--------------------------------------------
+$products = $cache->get("MyModule.getProducts.0a1.2fe.5gero", function () {
+    return [
+        [
+            "name" => "red table",
+            "price" => "9$",
+        ],
+        [
+            "name" => "blue table",
+            "price" => "10$",
+        ],
+    ];
+});
+
+
+$products2 = $cache->get("MyModule.getProducts.iii.dg7.0ze4", function () {
+    return [
+        [
+            "name" => "green table",
+            "price" => "7.5$",
+        ],
+        [
+            "name" => "table light",
+            "price" => "2.5$",
+        ],
+    ];
+});
+
+
+$cache->cleanByCacheIdentifierPrefix("MyModule.getProducts.");
+
+/**
+ * Output for the daily strategy (first call):
+ * string(80) "EVENT: cacheCreateBefore with cacheIdentifier MyModule.getProducts.0a1.2fe.5gero"
+ * string(79) "EVENT: cacheCreateBefore with cacheIdentifier MyModule.getProducts.iii.dg7.0ze4"
+ *  
+ */
+
+
+
+
+
+````
+
 
 
 
 
 History Log
 ------------------    
+    
+- 2.4.0 -- 2018-06-11
+
+    - add TabathaCache2Interface.cleanByCacheIdentifierPrefix method
     
 - 2.3.1 -- 2018-06-09
 
