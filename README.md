@@ -214,6 +214,13 @@ everybody sleeps), so that for a whole day, your app benefits the cache speed.
 
 Of course your business model might/might not allow it, but if this is an option, then good for you.
 
+
+Note: with a daily cache strategy, since there are too many files, often you will prefer let users create the cache
+instead of creating the cache by advance; this means the first user landing on a cacheable page creates the cache
+for all other users for the current day.
+
+
+
 To implement this strategy, we will use the following combination of methods:
 
 - get (without the deleteIds argument)
