@@ -18,12 +18,21 @@ interface TabathaCache2Interface
     public function get(string $cacheIdentifier, callable $generateCallback, $deleteIds = null);
 
     /**
-     * Deletes the caches which identifiers are given
+     * Deletes the caches referenced by/attached to  the given delete identifier.
      *
      * @param $deleteIds , string|array
      * @return void
      */
     public function clean($deleteIds);
+
+
+    /**
+     * Deletes all cached entries which relative path starts with the given $cacheIdentifierPrefix.
+     *
+     * @param $cacheIdentifierPrefix: string|array
+     * @return mixed
+     */
+    public function cleanByCacheIdentifierPrefix($cacheIdentifierPrefix);
 
     /**
      * Cleans all caches.
