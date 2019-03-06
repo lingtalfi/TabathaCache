@@ -13,7 +13,7 @@ Install
 ==========
 Using the [uni](https://github.com/lingtalfi/universe-naive-importer) command.
 ```bash
-uni import TabathaCache
+uni import Ling/TabathaCache
 ```
 
 Or just download it and place it where you want otherwise.
@@ -266,7 +266,7 @@ Example
 
 
 use Core\Services\A;
-use TabathaCache\Cache\TabathaCache2;
+use Ling\TabathaCache\Cache\TabathaCache2;
 
 
 // using kamille framework here (https://github.com/lingtalfi/kamille)

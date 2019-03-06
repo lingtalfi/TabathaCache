@@ -1,10 +1,10 @@
 <?php
 
 
-namespace TabathaCache\Cache;
+namespace Ling\TabathaCache\Cache;
 
 
-use Bat\FileSystemTool;
+use Ling\Bat\FileSystemTool;
 
 /**
  * Welcome to tabatha cache 2.

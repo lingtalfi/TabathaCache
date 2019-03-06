@@ -1,7 +1,7 @@
 <?php
 
 
-namespace TabathaCache\Cache;
+namespace Ling\TabathaCache\Cache;
 
 
 
